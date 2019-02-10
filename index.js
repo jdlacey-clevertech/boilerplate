@@ -12,14 +12,19 @@ const chalk = require('chalk')
 const generate = require('nanoid/generate')
 
 const repos = {
-  boilerplate: `jdlacey-clevertech`,
-  boilerplateExtras: 'clevertech'
+  boilerplate: {
+    repo: 'jdlacey-clevertech',
+    options: '--single-branch --branch apollo'
+  },
+  boilerplateExtras: {
+    repo: 'clevertech'
+  }
 }
 
 const repoURL = (protocol, project) => {
   protocol === 'ssh'
-    ? `git@github.com:${repos[project]}/${project}.git`
-    : `https://github.com/${repos[project]}/${project}.git`
+    ? `git@github.com:${repos[project].repo}/${project}.git`
+    : `https://github.com/${repos[project].repo}/${project}.git`
 }
 
 const dirName = process.argv[2]
@@ -68,14 +73,15 @@ console.log('Creating a new Clevertech project in', basedir)
 
 const cloneRepo = async (projectName, basedir) => {
   console.log('Cloning repository')
+  const options = repos[projectName].options || ''
   try {
-    await exec(`git clone ${repoURL('ssh', projectName)} ${basedir} --depth 1`)
+    await exec(`git clone ${options} ${repoURL('ssh', projectName)} ${basedir} --depth 1`)
     return 'ssh'
   } catch (err) {
     if (err.message.indexOf('Permission denied (publickey)') === -1) throw err
     console.log('Cloning using SSH failed. Trying with HTTPS')
     await exec(
-      `git clone ${repoURL('https', projectName)} ${basedir} --depth 1`
+      `git clone ${options} ${repoURL('https', projectName)} ${basedir} --depth 1`
     )
     return 'https'
   }
@@ -91,7 +97,7 @@ const deleteLicense = () => {
 }
 
 function setImageNames(composeConfig, keys, name) {
-  keys.forEach(function(key) {
+  keys.forEach(function (key) {
     composeConfig.services[key].image = `${name}_${key}:latest`
   })
 }
@@ -398,17 +404,17 @@ const addExtras = async (deployMode) => {
 
   const files = ['api/Makefile', 'frontend/Makefile', 'terraform']
   if (deployMode === 'k8s') {
-      files.push('buildspec-k8s-api.yml');
-      files.push('buildspec-k8s-frontend.yml');
+    files.push('buildspec-k8s-api.yml');
+    files.push('buildspec-k8s-frontend.yml');
   } else {
-      files.push('buildspec-ecs-api.yml');
-      files.push('buildspec-ecs-frontend.yml');
+    files.push('buildspec-ecs-api.yml');
+    files.push('buildspec-ecs-frontend.yml');
   }
 
   // move files
   await Promise.all(
     files.map(filename =>
-      fs.move(path.join(dir, filename), path.join(basedir, filename.replace( /\-k8s|\-ecs/, '' )))
+      fs.move(path.join(dir, filename), path.join(basedir, filename.replace(/\-k8s|\-ecs/, '')))
     )
   )
 
@@ -468,7 +474,7 @@ const run = async () => {
         name: 'deployMode',
         type: 'list',
         message: 'What is the deploy mode?',
-        choices: ['k8s','ecs'],
+        choices: ['k8s', 'ecs'],
         default: 'k8s'
       },
       {
