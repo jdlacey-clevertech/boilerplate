@@ -16,16 +16,14 @@ const repos = {
     repo: 'jdlacey-clevertech',
     options: '--single-branch --branch apollo'
   },
-  boilerplateExtras: {
-    repo: 'clevertech'
-  }
 }
 
-const repoURL = (protocol, project) =>
-  protocol === 'ssh'
-    ? `git@github.com:${repos[project].repo}/${project}.git`
-    : `https://github.com/${repos[project].repo}/${project}.git`
-
+const repoURL = (protocol, project) => {
+  const repo = repos[project] ? repos[project].repo : 'clevertech'
+  return protocol === 'ssh'
+    ? `git@github.com:${repo}/${project}.git`
+    : `https://github.com/${repo}/${project}.git`
+}
 
 const dirName = process.argv[2]
 
