@@ -21,11 +21,11 @@ const repos = {
   }
 }
 
-const repoURL = (protocol, project) => {
+const repoURL = (protocol, project) =>
   protocol === 'ssh'
     ? `git@github.com:${repos[project].repo}/${project}.git`
     : `https://github.com/${repos[project].repo}/${project}.git`
-}
+
 
 const dirName = process.argv[2]
 
