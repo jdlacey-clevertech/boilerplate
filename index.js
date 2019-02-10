@@ -11,10 +11,16 @@ const child_process = require('child_process')
 const chalk = require('chalk')
 const generate = require('nanoid/generate')
 
-const repoURL = (protocol, project) =>
+const repos = {
+  boilerplate: `jdlacey-clevertech`,
+  boilerplateExtras: 'clevertech'
+}
+
+const repoURL = (protocol, project) => {
   protocol === 'ssh'
-    ? `git@github.com:clevertech/${project}.git`
-    : `https://github.com/clevertech/${project}.git`
+    ? `git@github.com:${repos[project]}/${project}.git`
+    : `https://github.com/${repos[project]}/${project}.git`
+}
 
 const dirName = process.argv[2]
 
