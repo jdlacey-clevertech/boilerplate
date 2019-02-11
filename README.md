@@ -12,7 +12,7 @@ The script also initializes a new git repository and creates random passwords an
 
 End users use this script like this:
 
-`npx github:clevertech/boilerplate#create-boilerplate-app my-new-app`
+`npx github:jdlacey-clevertech/boilerplate#create-boilerplate-app my-new-app`
 
 Where `my-new-app` is the name of the directory where your new project will be stored.
 
