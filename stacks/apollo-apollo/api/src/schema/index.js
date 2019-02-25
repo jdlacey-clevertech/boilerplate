@@ -16,16 +16,10 @@ const {
   resolvers: SampleResolvers
 } = require('./Sample')
 
-// {
-//   typeDefs: AuthTypeDefs,
-//   resolvers: AuthResolvers
-// } = require('./Auth')
-
 // merge resolvers
 const resolvers = {
   ...GlobalResolvers,
   ...DateTimeResolvers,
-  // ...AuthResolvers,
   ...SampleResolvers
 }
 
@@ -33,7 +27,6 @@ const resolvers = {
 const typeDefs = [
   GlobalTypeDefs,
   DateTimeTypeDefs,
-  // AuthTypeDefs,
   SampleTypeDefs
 ]
 
@@ -41,5 +34,4 @@ const typeDefs = [
 module.exports = {
   typeDefs,
   resolvers
-  // ,CognitoAuthDirective
 }
